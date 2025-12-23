@@ -1,4 +1,4 @@
-/* src/App.css - Replace karo completely */
+/* src/App.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -82,8 +82,20 @@ body {
   font-size: 20px !important;
 }
 
+/* Pagination bullets – hero slider style */
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  opacity: 0.5;
+  transition: all 0.3s;
+}
+
 .swiper-pagination-bullet-active {
-  background: #FF385C !important;
+  opacity: 1;
+  width: 32px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #ec4899, #d946ef) !important;
 }
 
 /* Animations */
@@ -101,6 +113,7 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out;
 }
+
 /* Hide scrollbar but keep functionality */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
