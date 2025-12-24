@@ -9,7 +9,9 @@ import Contact from './pages/Contact';
 import Wishlist from './pages/Wishlist';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Booking from './pages/Booking';
 import ScrollToTop from './components/ScrollToTop';
+import BookingConfirmation from './pages/BookingConfirmation';
 
 function App() {
   return (
@@ -24,9 +26,10 @@ function App() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/booking-confirmation" element={<BookingConfirmation />} />
       </Routes>
       
-      {/* Scroll to Top Button - Works on all pages */}
       <ScrollToTop />
     </Router>
   );

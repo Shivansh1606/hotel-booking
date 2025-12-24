@@ -6,7 +6,6 @@ import { FiArrowUp } from 'react-icons/fi';
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when page is scrolled down
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.pageYOffset > 300) {
@@ -23,7 +22,6 @@ const ScrollToTop = () => {
     };
   }, []);
 
-  // Scroll to top smoothly
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -41,7 +39,7 @@ const ScrollToTop = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-4 bg-gradient-to-r from-primary to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 group"
+          className="fixed bottom-24 right-8 z-50 p-4 bg-gradient-to-r from-primary to-pink-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 group"
           aria-label="Scroll to top"
         >
           <FiArrowUp className="w-6 h-6 group-hover:animate-bounce" />
