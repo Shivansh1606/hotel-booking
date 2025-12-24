@@ -15,6 +15,8 @@ const Booking = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const hotelId = location.state?.hotelId || 1;
+  const initialAdults = location.state?.adults || 2;
+  const initialChildren = location.state?.children || 0;
   const hotel = allHotels.find((h) => h.id === hotelId);
 
   const [bookingData, setBookingData] = useState({
@@ -28,7 +30,8 @@ const Booking = () => {
     // Booking Details
     checkIn: '',
     checkOut: '',
-    guests: 2,
+    adults: initialAdults,
+    children: initialChildren,
     rooms: 1,
     
     // Payment Details
@@ -40,6 +43,17 @@ const Booking = () => {
   });
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  // Update guest count
+  const updateCount = (type, action) => {
+    setBookingData(prev => {
+      const newValue = action === 'increment' 
+        ? prev[type] + 1 
+        : Math.max(type === 'adults' ? 1 : type === 'rooms' ? 1 : 0, prev[type] - 1);
+      
+      return { ...prev, [type]: newValue };
+    });
+  };
 
   // Calculate nights and total
   const calculateNights = () => {
@@ -56,6 +70,7 @@ const Booking = () => {
   const roomTotal = hotel.price * nights * bookingData.rooms;
   const taxesAndFees = roomTotal * 0.18; // 18% GST
   const totalAmount = roomTotal + taxesAndFees;
+  const totalGuests = bookingData.adults + bookingData.children;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -221,7 +236,7 @@ const Booking = () => {
                     Booking Details
                   </h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Check-in Date *
@@ -251,43 +266,95 @@ const Booking = () => {
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition"
                       />
                     </div>
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Number of Guests *
-                      </label>
-                      <select
-                        name="guests"
-                        value={bookingData.guests}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition"
-                      >
-                        {[1, 2, 3, 4, 5, 6].map((num) => (
-                          <option key={num} value={num}>
-                            {num} {num === 1 ? 'Guest' : 'Guests'}
-                          </option>
-                        ))}
-                      </select>
+                  {/* Guest Counters */}
+                  <div className="space-y-4">
+                    {/* Adults Counter */}
+                    <div className="p-4 bg-gray-50 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-gray-800">Adults</p>
+                          <p className="text-sm text-gray-600">Age 13+</p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            type="button"
+                            onClick={() => updateCount('adults', 'decrement')}
+                            className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-primary text-gray-700 hover:text-primary font-bold transition flex items-center justify-center"
+                          >
+                            −
+                          </button>
+                          <span className="w-10 text-center font-bold text-gray-800 text-lg">
+                            {bookingData.adults}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateCount('adults', 'increment')}
+                            className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-primary text-gray-700 hover:text-primary font-bold transition flex items-center justify-center"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Number of Rooms *
-                      </label>
-                      <select
-                        name="rooms"
-                        value={bookingData.rooms}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition"
-                      >
-                        {[1, 2, 3, 4, 5].map((num) => (
-                          <option key={num} value={num}>
-                            {num} {num === 1 ? 'Room' : 'Rooms'}
-                          </option>
-                        ))}
-                      </select>
+                    {/* Children Counter */}
+                    <div className="p-4 bg-gray-50 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-gray-800">Children</p>
+                          <p className="text-sm text-gray-600">Age 2-12</p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            type="button"
+                            onClick={() => updateCount('children', 'decrement')}
+                            className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-primary text-gray-700 hover:text-primary font-bold transition flex items-center justify-center"
+                          >
+                            −
+                          </button>
+                          <span className="w-10 text-center font-bold text-gray-800 text-lg">
+                            {bookingData.children}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateCount('children', 'increment')}
+                            className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-primary text-gray-700 hover:text-primary font-bold transition flex items-center justify-center"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Rooms Counter */}
+                    <div className="p-4 bg-gray-50 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-gray-800">Rooms</p>
+                          <p className="text-sm text-gray-600">Number of rooms</p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            type="button"
+                            onClick={() => updateCount('rooms', 'decrement')}
+                            className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-primary text-gray-700 hover:text-primary font-bold transition flex items-center justify-center"
+                          >
+                            −
+                          </button>
+                          <span className="w-10 text-center font-bold text-gray-800 text-lg">
+                            {bookingData.rooms}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateCount('rooms', 'increment')}
+                            className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-primary text-gray-700 hover:text-primary font-bold transition flex items-center justify-center"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -511,7 +578,9 @@ const Booking = () => {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Guests</span>
-                      <span className="font-semibold text-gray-800">{bookingData.guests}</span>
+                      <span className="font-semibold text-gray-800">
+                        {totalGuests} ({bookingData.adults} Adults, {bookingData.children} Children)
+                      </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Rooms</span>
