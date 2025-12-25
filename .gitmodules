@@ -1,3 +1,4 @@
 [submodule "hotel-booking"]
 	path = hotel-booking
 	url = https://github.com/GrowingUpp1/hotel-booking.git
+	branch = master
